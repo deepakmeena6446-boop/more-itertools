@@ -250,7 +250,7 @@ def chunked(iterable, n, strict=False):
         return iterator
 
 
-def first(iterable, default=_marker):
+def first(iterable, default=_marker, pred=None):
     """Return the first item of *iterable*, or *default* if *iterable* is
     empty.
 
@@ -258,6 +258,9 @@ def first(iterable, default=_marker):
         0
         >>> first([], 'some default')
         'some default'
+
+    If *pred* is given, return the first item for which ``pred(item)`` is
+    true instead.
 
     If *default* is not provided and there are no items in the iterable,
     raise ``ValueError``.
@@ -268,6 +271,8 @@ def first(iterable, default=_marker):
 
     """
     for item in iterable:
+        if pred is not None and not pred(item):
+            continue
         return item
     if default is _marker:
         raise ValueError(
